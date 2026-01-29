@@ -1,0 +1,77 @@
+<!-- views/pages/information-detail.ejs -->
+<div class="d-flex align-items-start justify-content-between mt-3 mb-3">
+  <div>
+    <h1 class="h3 mb-1"><%= info.title && (info.title.en || info.title[Object.keys(info.title)[0]]) %></h1>
+    <div class="d-flex flex-wrap gap-2">
+      <span class="badge bg-secondary"><%= info.category %></span>
+      <% if (info.priority === 'urgent') { %>
+        <span class="badge bg-danger">Urgent</span>
+      <% } else if (info.priority === 'high') { %>
+        <span class="badge bg-warning text-dark">High</span>
+      <% } %>
+      <% if (info.isVerified) { %>
+        <span class="badge bg-success">Verified</span>
+      <% } %>
+    </div>
+    <div class="text-muted small mt-2">
+      <% if (info.createdBy) { %>
+        By <%= info.createdBy.firstName %> <%= info.createdBy.lastName %>
+      <% } %>
+      <span class="ms-2">•</span>
+      <span class="ms-2"><%= new Date(info.createdAt).toLocaleDateString() %></span>
+    </div>
+  </div>
+</div>
+
+<div class="card mb-4">
+  <div class="card-body">
+    <p class="mb-0" style="white-space: pre-wrap;">
+      <%= info.content && (info.content.en || info.content[Object.keys(info.content)[0]]) %>
+    </p>
+  </div>
+</div>
+
+<% if (info.contacts && info.contacts.length > 0) { %>
+  <div class="card mb-4">
+    <div class="card-header">
+      <strong>Contacts</strong>
+    </div>
+    <div class="card-body">
+      <div class="list-group">
+        <% info.contacts.forEach((c) => { %>
+          <div class="list-group-item">
+            <div class="fw-semibold"><%= c.organization || 'Contact' %></div>
+            <% if (c.phone) { %><div class="small"><strong>Phone:</strong> <%= c.phone %></div><% } %>
+            <% if (c.email) { %><div class="small"><strong>Email:</strong> <%= c.email %></div><% } %>
+            <% if (c.address) { %><div class="small"><strong>Address:</strong> <%= c.address %></div><% } %>
+            <% if (c.hours) { %><div class="small"><strong>Hours:</strong> <%= c.hours %></div><% } %>
+          </div>
+        <% }) %>
+      </div>
+    </div>
+  </div>
+<% } %>
+
+<div class="d-flex gap-2">
+  <a class="btn btn-outline-secondary" href="/information">Back to Information Hub</a>
+  <% if (typeof user !== 'undefined' && user) { %>
+    <button class="btn btn-outline-primary" id="likeBtn" type="button">Like</button>
+  <% } %>
+</div>
+
+<script>
+  (function () {
+    const btn = document.getElementById('likeBtn');
+    if (!btn) return;
+    btn.addEventListener('click', async () => {
+      try {
+        const res = await fetch('/api/information/<%= info._id %>/like', { method: 'POST' });
+        const data = await res.json();
+        if (data && data.success) btn.textContent = data.liked ? 'Liked' : 'Like';
+      } catch (e) {
+        console.error(e);
+      }
+    });
+  })();
+</script>
+

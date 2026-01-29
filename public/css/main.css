@@ -1,0 +1,84 @@
+/* Basic styling for RefugeeConnect Uganda */
+
+body {
+  background: #f8fafc;
+}
+
+.sidebar {
+  min-height: calc(100vh - 56px);
+  background: #ffffff;
+  border-right: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.skip-link:focus {
+  left: 1rem;
+  top: 1rem;
+  width: auto;
+  height: auto;
+  padding: 0.5rem 0.75rem;
+  background: #000;
+  color: #fff;
+  z-index: 1050;
+}
+
+.emergency-fab {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 1040;
+}
+
+.btn-fab {
+  width: 52px;
+  height: 52px;
+  border-radius: 999px;
+}
+
+.chat-messages {
+  min-height: 280px;
+  max-height: 520px;
+  overflow-y: auto;
+}
+
+.message {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.message-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  background: #e9ecef;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.message.ai-message .message-avatar {
+  background: #dbeafe;
+}
+
+.message-content {
+  flex: 1;
+}
+
+.status-indicator {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #22c55e;
+  margin-right: 0.35rem;
+}
+

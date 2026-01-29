@@ -1,0 +1,60 @@
+<!-- views/pages/services.ejs -->
+<h1 class="mb-4">Services Directory</h1>
+
+<div class="row mb-4">
+  <div class="col-md-12">
+    <div class="input-group">
+      <input type="text" id="serviceSearch" class="form-control" placeholder="Search services...">
+      <button class="btn btn-primary" onclick="searchServices()">Search</button>
+    </div>
+  </div>
+</div>
+
+<div id="servicesContainer" class="row">
+  <!-- Services will be loaded here via JavaScript -->
+  <div class="col-12 text-center">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+</div>
+
+<script>
+async function loadServices(search = '') {
+  try {
+    const url = search ? `/api/services?search=${encodeURIComponent(search)}` : '/api/services';
+    const response = await fetch(url);
+    const data = await response.json();
+    
+    const container = document.getElementById('servicesContainer');
+    if (data.success && data.services.length > 0) {
+      container.innerHTML = data.services.map(service => `
+        <div class="col-md-4 mb-3">
+          <div class="card h-100">
+            <div class="card-body">
+              <h5 class="card-title">${service.name}</h5>
+              <p class="card-text">${service.description}</p>
+              <p class="small text-muted"><strong>Location:</strong> ${service.location}</p>
+              <p class="small text-muted"><strong>Contact:</strong> ${service.contact}</p>
+              ${service.website ? `<a href="${service.website}" target="_blank" class="btn btn-sm btn-primary">Visit Website</a>` : ''}
+            </div>
+          </div>
+        </div>
+      `).join('');
+    } else {
+      container.innerHTML = '<div class="col-12"><div class="alert alert-info">No services found.</div></div>';
+    }
+  } catch (error) {
+    console.error('Error loading services:', error);
+    document.getElementById('servicesContainer').innerHTML = '<div class="col-12"><div class="alert alert-danger">Failed to load services.</div></div>';
+  }
+}
+
+function searchServices() {
+  const search = document.getElementById('serviceSearch').value;
+  loadServices(search);
+}
+
+// Load services on page load
+loadServices();
+</script>

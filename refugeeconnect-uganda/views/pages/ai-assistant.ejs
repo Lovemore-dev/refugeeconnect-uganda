@@ -1,0 +1,181 @@
+<!-- views/pages/ai-assistant.ejs -->
+
+<div class="ai-assistant-container">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-1" data-translate="ai.title">AI Assistant</h1>
+            <p class="text-muted mb-0" data-translate="ai.subtitle">Get instant help and information</p>
+        </div>
+        <div class="d-flex gap-2">
+            <!-- Language Selector -->
+            <div class="dropdown">
+                <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                    <i class="fas fa-language me-1"></i>
+                    <span id="current-language"><%= user ? user.preferredLanguage.toUpperCase() : 'EN' %></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#" data-lang="en">English</a></li>
+                    <li><a class="dropdown-item" href="#" data-lang="sw">Kiswahili</a></li>
+                    <li><a class="dropdown-item" href="#" data-lang="lg">Luganda</a></li>
+                    <li><a class="dropdown-item" href="#" data-lang="ac">Acholi</a></li>
+                    <li><a class="dropdown-item" href="#" data-lang="ar">العربية</a></li>
+                </ul>
+            </div>
+            
+            <!-- Settings -->
+            <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#aiSettingsModal">
+                <i class="fas fa-cog"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions mb-4">
+        <h5 class="mb-3" data-translate="ai.quick_questions">Quick Questions</h5>
+        <div class="row g-2">
+            <div class="col-md-4">
+                <button class="btn btn-outline-primary w-100 quick-question" 
+                        data-question="registration">
+                    <i class="fas fa-clipboard-list me-2"></i>
+                    <span data-translate="quick.registration">How to register as refugee?</span>
+                </button>
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-outline-primary w-100 quick-question" 
+                        data-question="healthcare">
+                    <i class="fas fa-heartbeat me-2"></i>
+                    <span data-translate="quick.healthcare">Find healthcare services</span>
+                </button>
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-outline-primary w-100 quick-question" 
+                        data-question="education">
+                    <i class="fas fa-graduation-cap me-2"></i>
+                    <span data-translate="quick.education">Education opportunities</span>
+                </button>
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-outline-primary w-100 quick-question" 
+                        data-question="legal">
+                    <i class="fas fa-balance-scale me-2"></i>
+                    <span data-translate="quick.legal">Legal assistance</span>
+                </button>
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-outline-primary w-100 quick-question" 
+                        data-question="employment">
+                    <i class="fas fa-briefcase me-2"></i>
+                    <span data-translate="quick.employment">Job opportunities</span>
+                </button>
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-outline-primary w-100 quick-question" 
+                        data-question="emergency">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <span data-translate="quick.emergency">Emergency contacts</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat Interface -->
+    <div class="card chat-container">
+        <div class="card-header d-flex align-items-center">
+            <div class="avatar me-3">
+                <i class="fas fa-robot"></i>
+            </div>
+            <div>
+                <h6 class="mb-0" data-translate="ai.assistant_name">RefugeeAssist AI</h6>
+                <small class="text-muted">
+                    <span class="status-indicator online"></span>
+                    <span data-translate="ai.status_online">Online</span>
+                </small>
+            </div>
+        </div>
+        
+        <div class="card-body chat-messages" id="chatMessages">
+            <!-- Welcome Message -->
+            <div class="message ai-message">
+                <div class="message-avatar">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="message-content">
+                    <div class="message-text" data-translate="ai.welcome">
+                        Hello! I'm here to help you with information about refugee services in Uganda. 
+                        You can ask me questions in English, Swahili, Luganda, or Arabic.
+                    </div>
+                    <div class="message-actions">
+                        <button class="btn btn-sm btn-link speak-btn" data-text="ai.welcome">
+                            <i class="fas fa-volume-up"></i>
+                        </button>
+                        <span class="message-time">Just now</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card-footer">
+            <form id="chatForm" class="d-flex align-items-end gap-2">
+                <div class="flex-grow-1">
+                    <textarea 
+                        id="messageInput" 
+                        class="form-control" 
+                        rows="1" 
+                        placeholder="Type your message..."
+                        data-translate-placeholder="ai.input_placeholder"
+                        style="resize: none; max-height: 100px;"></textarea>
+                </div>
+                
+                <!-- Voice Input -->
+                <button type="button" id="voiceBtn" class="btn btn-outline-secondary" 
+                        aria-label="Voice input" data-bs-toggle="tooltip" data-bs-title="Voice input">
+                    <i class="fas fa-microphone"></i>
+                </button>
+                
+                <!-- Send Button -->
+                <button type="submit" id="sendBtn" class="btn btn-primary" disabled>
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- AI Settings Modal -->
+<div class="modal fade" id="aiSettingsModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" data-translate="ai.settings">AI Assistant Settings</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="aiSettingsForm">
+                    <div class="mb-3">
+                        <label class="form-label" data-translate="ai.response_language">Response Language</label>
+                        <select class="form-select" name="responseLanguage">
+                            <option value="auto" data-translate="ai.auto_detect">Auto-detect</option>
+                            <option value="en">English</option>
+                            <option value="sw">Kiswahili</option>
+                            <option value="lg">Luganda</option>
+                            <option value="ar">Arabic</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Privacy</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="saveHistory" name="saveHistory" checked>
+                            <label class="form-check-label" for="saveHistory">
+                                Save my AI chat history
+                            </label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

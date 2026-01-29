@@ -1,0 +1,79 @@
+<!-- views/pages/information.ejs -->
+<h1 class="mb-4">Information Hub</h1>
+
+<div class="row mb-4">
+  <div class="col-md-8">
+    <form method="GET" action="/information" class="mb-3">
+      <div class="input-group">
+        <input type="text" name="search" class="form-control" placeholder="Search information..." value="<%= currentSearch || '' %>">
+        <button class="btn btn-primary" type="submit">Search</button>
+      </div>
+    </form>
+  </div>
+  <div class="col-md-4">
+    <select class="form-select" onchange="window.location.href='/information?category=' + this.value">
+      <option value="">All Categories</option>
+      <% categories.forEach(cat => { %>
+      <option value="<%= cat %>" <%= currentCategory === cat ? 'selected' : '' %>><%= cat %></option>
+      <% }) %>
+    </select>
+  </div>
+</div>
+
+<% if (information && information.length > 0) { %>
+<div class="row">
+  <% information.forEach(info => { %>
+  <div class="col-md-4 mb-3">
+    <div class="card h-100">
+      <div class="card-body">
+        <h5 class="card-title">
+          <a href="/information/<%= info._id %>" class="text-decoration-none">
+            <%= info.title.en || info.title[Object.keys(info.title)[0]] %>
+          </a>
+        </h5>
+        <p class="card-text small">
+          <%= (info.content.en || info.content[Object.keys(info.content)[0]] || '').substring(0, 150) %>...
+        </p>
+        <div class="d-flex justify-content-between align-items-center">
+          <span class="badge bg-secondary"><%= info.category %></span>
+          <% if (info.priority === 'urgent') { %>
+          <span class="badge bg-danger">Urgent</span>
+          <% } %>
+        </div>
+        <% if (info.createdBy) { %>
+        <small class="text-muted d-block mt-2">
+          By <%= info.createdBy.firstName %> <%= info.createdBy.lastName %>
+        </small>
+        <% } %>
+      </div>
+    </div>
+  </div>
+  <% }) %>
+</div>
+
+<% if (pagination && pagination.total > 1) { %>
+<nav aria-label="Page navigation">
+  <ul class="pagination justify-content-center">
+    <% if (pagination.hasPrev) { %>
+    <li class="page-item">
+      <a class="page-link" href="/information?page=<%= pagination.current - 1 %><%= currentCategory ? '&category=' + currentCategory : '' %><%= currentSearch ? '&search=' + currentSearch : '' %>">Previous</a>
+    </li>
+    <% } %>
+    <% for (let i = 1; i <= pagination.total; i++) { %>
+    <li class="page-item <%= i === pagination.current ? 'active' : '' %>">
+      <a class="page-link" href="/information?page=<%= i %><%= currentCategory ? '&category=' + currentCategory : '' %><%= currentSearch ? '&search=' + currentSearch : '' %>"><%= i %></a>
+    </li>
+    <% } %>
+    <% if (pagination.hasNext) { %>
+    <li class="page-item">
+      <a class="page-link" href="/information?page=<%= pagination.current + 1 %><%= currentCategory ? '&category=' + currentCategory : '' %><%= currentSearch ? '&search=' + currentSearch : '' %>">Next</a>
+    </li>
+    <% } %>
+  </ul>
+</nav>
+<% } %>
+<% } else { %>
+<div class="alert alert-info">
+  <p class="mb-0">No information found. Try adjusting your search or filters.</p>
+</div>
+<% } %>

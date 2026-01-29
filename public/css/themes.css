@@ -1,0 +1,11 @@
+/* Placeholder theme rules */
+
+.high-contrast {
+  background: #000 !important;
+  color: #fff !important;
+}
+
+.high-contrast a {
+  color: #93c5fd !important;
+}
+

@@ -1,0 +1,119 @@
+<!-- views/pages/dashboard.ejs -->
+<h1 class="mb-4">Dashboard</h1>
+
+<div class="row mb-4">
+  <div class="col-md-3 mb-3">
+    <div class="card text-white bg-primary">
+      <div class="card-body">
+        <h5 class="card-title">Information</h5>
+        <h2><%= personalizedInfo ? personalizedInfo.length : 0 %></h2>
+        <a href="/information" class="text-white text-decoration-none">View All →</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3 mb-3">
+    <div class="card text-white bg-success">
+      <div class="card-body">
+        <h5 class="card-title">AI Interactions</h5>
+        <h2><%= recentInteractions ? recentInteractions.length : 0 %></h2>
+        <a href="/ai-assistant" class="text-white text-decoration-none">Chat Now →</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3 mb-3">
+    <div class="card text-white bg-info">
+      <div class="card-body">
+        <h5 class="card-title">Community</h5>
+        <h2>-</h2>
+        <a href="/community" class="text-white text-decoration-none">Join →</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3 mb-3">
+    <div class="card text-white bg-warning">
+      <div class="card-body">
+        <h5 class="card-title">Services</h5>
+        <h2>-</h2>
+        <a href="/services" class="text-white text-decoration-none">Browse →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6 mb-4">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="mb-0">Personalized Information</h5>
+      </div>
+      <div class="card-body">
+        <% if (personalizedInfo && personalizedInfo.length > 0) { %>
+        <div class="list-group">
+          <% personalizedInfo.forEach(info => { %>
+          <a href="/information/<%= info._id %>" class="list-group-item list-group-item-action">
+            <div class="d-flex w-100 justify-content-between">
+              <h6 class="mb-1"><%= info.title.en || info.title[Object.keys(info.title)[0]] %></h6>
+              <small class="text-muted"><%= info.category %></small>
+            </div>
+            <p class="mb-1 small"><%= (info.content.en || info.content[Object.keys(info.content)[0]] || '').substring(0, 100) %>...</p>
+          </a>
+          <% }) %>
+        </div>
+        <% } else { %>
+        <p class="text-muted">No personalized information available at this time.</p>
+        <% } %>
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-md-6 mb-4">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="mb-0">Recent AI Interactions</h5>
+      </div>
+      <div class="card-body">
+        <% if (recentInteractions && recentInteractions.length > 0) { %>
+        <div class="list-group">
+          <% recentInteractions.forEach(interaction => { %>
+          <div class="list-group-item">
+            <div class="d-flex w-100 justify-content-between">
+              <h6 class="mb-1">Q: <%= interaction.query.substring(0, 50) %>...</h6>
+              <small class="text-muted"><%= new Date(interaction.timestamp).toLocaleDateString() %></small>
+            </div>
+            <p class="mb-1 small">A: <%= interaction.response.substring(0, 100) %>...</p>
+          </div>
+          <% }) %>
+        </div>
+        <% } else { %>
+        <p class="text-muted">No recent AI interactions. <a href="/ai-assistant">Start chatting</a></p>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="quick-actions mt-4">
+  <h5 class="mb-3">Quick Actions</h5>
+  <div class="row g-2">
+    <div class="col-md-3">
+      <a href="/ai-assistant" class="btn btn-primary w-100">
+        <i class="fas fa-robot me-2"></i>AI Assistant
+      </a>
+    </div>
+    <div class="col-md-3">
+      <a href="/information" class="btn btn-info w-100">
+        <i class="fas fa-info-circle me-2"></i>Information Hub
+      </a>
+    </div>
+    <div class="col-md-3">
+      <a href="/services" class="btn btn-success w-100">
+        <i class="fas fa-concierge-bell me-2"></i>Services
+      </a>
+    </div>
+    <div class="col-md-3">
+      <a href="/community" class="btn btn-warning w-100">
+        <i class="fas fa-users me-2"></i>Community
+      </a>
+    </div>
+  </div>
+</div>

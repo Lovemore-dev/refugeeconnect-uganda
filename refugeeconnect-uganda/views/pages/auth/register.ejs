@@ -1,0 +1,77 @@
+<!-- views/pages/auth/register.ejs -->
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <div class="card">
+      <div class="card-body p-5">
+        <h2 class="text-center mb-4">Register</h2>
+        
+        <% if (typeof error !== 'undefined' && error) { %>
+        <div class="alert alert-danger"><%= error %></div>
+        <% } %>
+        
+        <form method="POST" action="/auth/register">
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">First Name *</label>
+              <input type="text" class="form-control" name="firstName" value="<%= formData && formData.firstName ? formData.firstName : '' %>" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Last Name *</label>
+              <input type="text" class="form-control" name="lastName" value="<%= formData && formData.lastName ? formData.lastName : '' %>" required>
+            </div>
+          </div>
+          
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Email *</label>
+              <input type="email" class="form-control" name="email" value="<%= formData && formData.email ? formData.email : '' %>" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Phone *</label>
+              <input type="tel" class="form-control" name="phone" value="<%= formData && formData.phone ? formData.phone : '' %>" required>
+            </div>
+          </div>
+          
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Password *</label>
+              <input type="password" class="form-control" name="password" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Confirm Password *</label>
+              <input type="password" class="form-control" name="confirmPassword" required>
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <label class="form-label">Refugee Status *</label>
+            <select class="form-select" name="refugeeStatus" required>
+              <option value="">Select status</option>
+              <option value="asylum_seeker" <%= formData && formData.refugeeStatus === 'asylum_seeker' ? 'selected' : '' %>>Asylum Seeker</option>
+              <option value="refugee" <%= formData && formData.refugeeStatus === 'refugee' ? 'selected' : '' %>>Refugee</option>
+              <option value="returnee" <%= formData && formData.refugeeStatus === 'returnee' ? 'selected' : '' %>>Returnee</option>
+              <option value="local_community" <%= formData && formData.refugeeStatus === 'local_community' ? 'selected' : '' %>>Local Community</option>
+            </select>
+          </div>
+          
+          <div class="mb-3">
+            <label class="form-label">Preferred Language</label>
+            <select class="form-select" name="preferredLanguage">
+              <option value="en" <%= formData && formData.preferredLanguage === 'en' ? 'selected' : '' %>>English</option>
+              <option value="sw" <%= formData && formData.preferredLanguage === 'sw' ? 'selected' : '' %>>Kiswahili</option>
+              <option value="lg" <%= formData && formData.preferredLanguage === 'lg' ? 'selected' : '' %>>Luganda</option>
+              <option value="ac" <%= formData && formData.preferredLanguage === 'ac' ? 'selected' : '' %>>Acholi</option>
+              <option value="ar" <%= formData && formData.preferredLanguage === 'ar' ? 'selected' : '' %>>Arabic</option>
+            </select>
+          </div>
+          
+          <button type="submit" class="btn btn-primary w-100 mb-3">Register</button>
+        </form>
+        
+        <div class="text-center">
+          <p class="mb-0">Already have an account? <a href="/auth/login">Login here</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

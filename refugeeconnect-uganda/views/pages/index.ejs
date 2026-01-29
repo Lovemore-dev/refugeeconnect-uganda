@@ -1,0 +1,95 @@
+<!-- views/pages/index.ejs -->
+<div class="hero-section mb-5">
+  <div class="jumbotron bg-primary text-white p-5 rounded">
+    <h1 class="display-4">Welcome to RefugeeConnect Uganda</h1>
+    <p class="lead">Your gateway to essential services, information, and community support</p>
+    <% if (!user) { %>
+    <a class="btn btn-light btn-lg mt-3" href="/auth/register">Get Started</a>
+    <% } else { %>
+    <a class="btn btn-light btn-lg mt-3" href="/dashboard">Go to Dashboard</a>
+    <% } %>
+  </div>
+</div>
+
+<% if (urgentInfo && urgentInfo.length > 0) { %>
+<div class="alert alert-danger mb-4">
+  <h5><i class="fas fa-exclamation-triangle me-2"></i>Urgent Information</h5>
+  <ul class="mb-0">
+    <% urgentInfo.forEach(info => { %>
+    <li>
+      <a href="/information/<%= info._id %>" class="text-decoration-none">
+        <%= info.title.en || info.title[Object.keys(info.title)[0]] %>
+      </a>
+    </li>
+    <% }) %>
+  </ul>
+</div>
+<% } %>
+
+<div class="row mb-4">
+  <div class="col-md-4 mb-3">
+    <div class="card h-100">
+      <div class="card-body">
+        <h5 class="card-title"><i class="fas fa-info-circle text-primary me-2"></i>Information Hub</h5>
+        <p class="card-text">Access important information about registration, legal rights, healthcare, education, and more.</p>
+        <a href="/information" class="btn btn-primary">Browse Information</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 mb-3">
+    <div class="card h-100">
+      <div class="card-body">
+        <h5 class="card-title"><i class="fas fa-robot text-success me-2"></i>AI Assistant</h5>
+        <p class="card-text">Get instant answers to your questions in multiple languages.</p>
+        <% if (user) { %>
+        <a href="/ai-assistant" class="btn btn-success">Chat Now</a>
+        <% } else { %>
+        <a href="/auth/login" class="btn btn-success">Login to Use</a>
+        <% } %>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 mb-3">
+    <div class="card h-100">
+      <div class="card-body">
+        <h5 class="card-title"><i class="fas fa-users text-info me-2"></i>Community</h5>
+        <p class="card-text">Connect with other refugees and share experiences.</p>
+        <% if (user) { %>
+        <a href="/community" class="btn btn-info">Join Community</a>
+        <% } else { %>
+        <a href="/auth/login" class="btn btn-info">Login to Join</a>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<% if (latestInfo && latestInfo.length > 0) { %>
+<div class="latest-information">
+  <h3 class="mb-3">Latest Information</h3>
+  <div class="row">
+    <% latestInfo.forEach(info => { %>
+    <div class="col-md-4 mb-3">
+      <div class="card">
+        <div class="card-body">
+          <h6 class="card-title">
+            <a href="/information/<%= info._id %>" class="text-decoration-none">
+              <%= info.title.en || info.title[Object.keys(info.title)[0]] %>
+            </a>
+          </h6>
+          <p class="card-text small text-muted">
+            <%= (info.content.en || info.content[Object.keys(info.content)[0]] || '').substring(0, 100) %>...
+          </p>
+          <small class="text-muted">
+            <span class="badge bg-secondary"><%= info.category %></span>
+            <% if (info.createdBy) { %>
+            <span class="ms-2">By <%= info.createdBy.firstName %> <%= info.createdBy.lastName %></span>
+            <% } %>
+          </small>
+        </div>
+      </div>
+    </div>
+    <% }) %>
+  </div>
+</div>
+<% } %>

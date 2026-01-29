@@ -1,0 +1,35 @@
+<!-- views/partials/sidebar.ejs -->
+<div class="position-sticky pt-3">
+  <ul class="nav flex-column">
+    <li class="nav-item">
+      <a class="nav-link <%= currentPath === '/dashboard' ? 'active' : '' %>" href="/dashboard">
+        <i class="fas fa-home me-2"></i>Dashboard
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link <%= currentPath === '/ai-assistant' ? 'active' : '' %>" href="/ai-assistant">
+        <i class="fas fa-robot me-2"></i>AI Assistant
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link <%= currentPath === '/information' ? 'active' : '' %>" href="/information">
+        <i class="fas fa-info-circle me-2"></i>Information Hub
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link <%= currentPath === '/services' ? 'active' : '' %>" href="/services">
+        <i class="fas fa-concierge-bell me-2"></i>Services
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link <%= currentPath === '/community' ? 'active' : '' %>" href="/community">
+        <i class="fas fa-users me-2"></i>Community
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link <%= currentPath === '/profile' ? 'active' : '' %>" href="/profile">
+        <i class="fas fa-user me-2"></i>My Profile
+      </a>
+    </li>
+  </ul>
+</div>

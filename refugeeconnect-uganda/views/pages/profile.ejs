@@ -1,0 +1,144 @@
+<!-- views/pages/profile.ejs -->
+<h1 class="mb-4">My Profile</h1>
+
+<div class="row">
+  <div class="col-md-8">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="mb-0">Profile Information</h5>
+      </div>
+      <div class="card-body">
+        <form id="profileForm">
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">First Name</label>
+              <input type="text" class="form-control" name="firstName" value="<%= user.firstName %>" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Last Name</label>
+              <input type="text" class="form-control" name="lastName" value="<%= user.lastName %>" required>
+            </div>
+          </div>
+          
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Email</label>
+              <input type="email" class="form-control" name="email" value="<%= user.email %>" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Phone</label>
+              <input type="tel" class="form-control" name="phone" value="<%= user.phone || '' %>">
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <label class="form-label">Preferred Language</label>
+            <select class="form-select" name="preferredLanguage">
+              <option value="en" <%= user.preferredLanguage === 'en' ? 'selected' : '' %>>English</option>
+              <option value="sw" <%= user.preferredLanguage === 'sw' ? 'selected' : '' %>>Kiswahili</option>
+              <option value="lg" <%= user.preferredLanguage === 'lg' ? 'selected' : '' %>>Luganda</option>
+              <option value="ac" <%= user.preferredLanguage === 'ac' ? 'selected' : '' %>>Acholi</option>
+              <option value="ar" <%= user.preferredLanguage === 'ar' ? 'selected' : '' %>>Arabic</option>
+            </select>
+          </div>
+          
+          <button type="submit" class="btn btn-primary">Update Profile</button>
+        </form>
+      </div>
+    </div>
+    
+    <div class="card mt-4">
+      <div class="card-header">
+        <h5 class="mb-0">Change Password</h5>
+      </div>
+      <div class="card-body">
+        <form id="passwordForm">
+          <div class="mb-3">
+            <label class="form-label">Current Password</label>
+            <input type="password" class="form-control" name="currentPassword" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">New Password</label>
+            <input type="password" class="form-control" name="newPassword" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Confirm New Password</label>
+            <input type="password" class="form-control" name="confirmPassword" required>
+          </div>
+          <button type="submit" class="btn btn-warning">Change Password</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-body text-center">
+        <div class="mb-3">
+          <i class="fas fa-user-circle fa-5x text-primary"></i>
+        </div>
+        <h5><%= user.firstName %> <%= user.lastName %></h5>
+        <p class="text-muted"><%= user.email %></p>
+        <p class="small">
+          <strong>Status:</strong> <%= user.refugeeStatus %><br>
+          <strong>Language:</strong> <%= user.preferredLanguage %>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.getElementById('profileForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const formData = new FormData(e.target);
+  const data = Object.fromEntries(formData);
+  
+  try {
+    const response = await fetch('/auth/profile', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    const result = await response.json();
+    if (result.success) {
+      alert('Profile updated successfully!');
+      location.reload();
+    } else {
+      alert('Failed to update profile');
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    alert('An error occurred');
+  }
+});
+
+document.getElementById('passwordForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const formData = new FormData(e.target);
+  const data = Object.fromEntries(formData);
+  
+  if (data.newPassword !== data.confirmPassword) {
+    alert('New passwords do not match');
+    return;
+  }
+  
+  try {
+    const response = await fetch('/auth/change-password', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    const result = await response.json();
+    if (result.success) {
+      alert('Password changed successfully!');
+      e.target.reset();
+    } else {
+      alert(result.error || 'Failed to change password');
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    alert('An error occurred');
+  }
+});
+</script>
