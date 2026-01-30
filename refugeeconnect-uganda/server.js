@@ -92,6 +92,9 @@ app.set('layout', 'layouts/main'); // Default layout
 app.use((req, res, next) => {
   res.locals.user = req.session.user || null;
   res.locals.currentPath = req.path;
+  res.locals.breadcrumbs = null;
+  res.locals.formData = {};
+  res.locals.title = 'RefugeeConnect Uganda';
   next();
 });
 
